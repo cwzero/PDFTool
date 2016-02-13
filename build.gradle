@@ -1,0 +1,33 @@
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'eclipse'
+
+mainClassName = 'net.createk.pdftool.PDFToolFrame'
+
+run {
+	workingDir = 'run'
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	jcenter()
+}
+
+dependencies {
+	compile group: 'org.apache.poi', name:'poi', version:'3.10.1'
+	compile group: 'org.apache.poi', name:'poi-ooxml', version:'3.10.1'
+	compile group: 'org.apache.pdfbox', name:'preflight-app', version:'1.8.7'
+	compile group: 'org.apache.pdfbox', name:'pdfbox-app', version:'1.8.7'
+}
+
+task src(type: Zip) {
+	classifier = 'src'
+	from (projectDir) {
+		include 'build.gradle'
+		include 'MANIFEST.MF'
+		include 'src/**/*'
+	}
+}
+
+assemble.dependsOn src
