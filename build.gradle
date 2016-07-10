@@ -1,33 +1,46 @@
+plugins {
+    id 'us.kirchmeier.capsule' version '1.0.2'
+}
+
 apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'eclipse'
 
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
 mainClassName = 'net.createk.pdftool.PDFToolFrame'
 
 run {
-	workingDir = 'run'
+    workingDir = 'run'
 }
 
 repositories {
-	mavenLocal()
-	mavenCentral()
-	jcenter()
+    mavenLocal()
+    mavenCentral()
+    jcenter()
 }
 
 dependencies {
-	compile group: 'org.apache.poi', name:'poi', version:'3.10.1'
-	compile group: 'org.apache.poi', name:'poi-ooxml', version:'3.10.1'
-	compile group: 'org.apache.pdfbox', name:'preflight-app', version:'1.8.7'
-	compile group: 'org.apache.pdfbox', name:'pdfbox-app', version:'1.8.7'
+    compile group: 'org.apache.poi', name: 'poi', version: '3.15-beta2'
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.15-beta2'
+    compile group: 'org.apache.pdfbox', name: 'preflight-app', version: '2.0.2'
+    compile group: 'org.apache.pdfbox', name: 'pdfbox-app', version: '2.0.2'
 }
 
 task src(type: Zip) {
-	classifier = 'src'
-	from (projectDir) {
-		include 'build.gradle'
-		include 'MANIFEST.MF'
-		include 'src/**/*'
-	}
+    classifier = 'src'
+    from(projectDir) {
+        include 'build.gradle'
+        include 'MANIFEST.MF'
+        include 'src/**/*'
+    }
 }
 
 assemble.dependsOn src
+
+task mavenCapsule(type: MavenCapsule) { applicationClass mainClassName }
+
+artifacts { archives mavenCapsule }
